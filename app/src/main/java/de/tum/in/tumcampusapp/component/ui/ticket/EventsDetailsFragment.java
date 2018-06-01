@@ -1,4 +1,4 @@
-package de.tum.in.tumcampusapp.component.ui.news;
+package de.tum.in.tumcampusapp.component.ui.ticket;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -23,20 +23,19 @@ import com.squareup.picasso.Picasso;
 import de.tum.in.tumcampusapp.R;
 import de.tum.in.tumcampusapp.component.ui.news.repository.KinoLocalRepository;
 import de.tum.in.tumcampusapp.component.ui.news.repository.KinoRemoteRepository;
-import de.tum.in.tumcampusapp.component.ui.tufilm.model.Kino;
-import de.tum.in.tumcampusapp.component.ui.ticket.ShowTicketActivity;
+import de.tum.in.tumcampusapp.component.ui.ticket.model.Event;
 import de.tum.in.tumcampusapp.database.TcaDb;
 import de.tum.in.tumcampusapp.utils.Const;
 import de.tum.in.tumcampusapp.utils.DateUtils;
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
- * Fragment for KinoDetails. Manages content that gets shown on the pagerView
+ * Fragment for EventDetails. Manages content that gets shown on the pagerView
  */
-public class KinoDetailsFragment extends Fragment {
+public class EventsDetailsFragment extends Fragment {
 
     private Context context;
-    private Kino kino;
+    private Event event;
     private String url; // link to homepage
     private LayoutInflater inflater;
 
@@ -47,21 +46,21 @@ public class KinoDetailsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.inflater = inflater;
-        View rootView = inflater.inflate(R.layout.fragment_kinodetails_section, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_eventdetails_section, container, false);
         LinearLayout root = rootView.findViewById(R.id.layout);
 
         // position in database
         int position = getArguments().getInt(Const.POSITION);
 
-        KinoLocalRepository.db = TcaDb.getInstance(context);
-        KinoViewModel kinoViewModel = new KinoViewModel(KinoLocalRepository.INSTANCE, KinoRemoteRepository.INSTANCE, disposable);
+        EvnentLocalRepository.db = TcaDb.getInstance(context);
+        EventViewModel eventViewModel = new EventViewModel(EventLocalRepository.INSTANCE, EventRemoteRepository.INSTANCE, disposable);
         context = root.getContext();
 
         // TODO: set isBooked if the user has already bought a ticket
 
-        kinoViewModel.getKinoByPosition(position)
-                .subscribe(kino1 -> {
-                    kino = kino1;
+        eventViewModel.getEventByPosition(position)
+                .subscribe(event1 -> {
+                    event = event1;
                     showDetails(root);
                 });
 
@@ -74,10 +73,10 @@ public class KinoDetailsFragment extends Fragment {
      * @param rootView view on which the content gets drawn
      */
     private void showDetails(LinearLayout rootView) {
-        url = kino.getLink();
+        url = event.getLink();
 
-        createKinoHeader(rootView);
-        createKinoFooter(rootView);
+        createeventHeader(rootView);
+        createeventFooter(rootView);
     }
 
     private void addToRoot(LinearLayout rootView, int headerId, CharSequence contentString) {
@@ -85,7 +84,7 @@ public class KinoDetailsFragment extends Fragment {
         TextView text = view.findViewById(R.id.list_header);
         text.setText(headerId);
         rootView.addView(view);
-        view = inflater.inflate(R.layout.kino_content, rootView, false);
+        view = inflater.inflate(R.layout.event_content, rootView, false);
         text = view.findViewById(R.id.line_name);
         text.setText(contentString);
         rootView.addView(view);
@@ -96,29 +95,29 @@ public class KinoDetailsFragment extends Fragment {
         TextView text = view.findViewById(R.id.list_header);
         text.setText(headerId);
         rootView.addView(view);
-        view = inflater.inflate(R.layout.kino_content, rootView, false);
+        view = inflater.inflate(R.layout.event_content, rootView, false);
         text = view.findViewById(R.id.line_name);
         text.setText(contentString);
         // padding is done programmatically here because we need more padding at the end
         int padding = (int) context.getResources()
-                .getDimension(R.dimen.padding_kino);
+                .getDimension(R.dimen.padding_event);
         int paddingRight = (int) context.getResources()
-                .getDimension(R.dimen.padding_kino_right);
+                .getDimension(R.dimen.padding_event_right);
         int paddingEnd = (int) context.getResources()
-                .getDimension(R.dimen.padding_kino_end);
+                .getDimension(R.dimen.padding_event_end);
         text.setPadding(padding, padding, paddingRight, paddingEnd);
         rootView.addView(view);
     }
 
-    private void createKinoFooter(LinearLayout root) {
-        addToRoot(root, R.string.genre, kino.getGenre());
-        addToRoot(root, R.string.director, kino.getDirector());
-        addToRoot(root, R.string.actors, kino.getActors());
-        addToRootWithPadding(root, R.string.description, kino.getDescription());
+    private void createEventFooter(LinearLayout root) {
+        addToRoot(root, R.string.genre, event.getGenre());
+        addToRoot(root, R.string.director, event.getDirector());
+        addToRoot(root, R.string.actors, event.getActors());
+        addToRootWithPadding(root, R.string.description, event.getDescription());
     }
 
-    private void createKinoHeader(LinearLayout rootView) {
-        LinearLayout headerView = (LinearLayout) inflater.inflate(R.layout.kino_header, rootView, false);
+    private void createEventHeader(LinearLayout rootView) {
+        LinearLayout headerView = (LinearLayout) inflater.inflate(R.layout.event_header, rootView, false);
 
         // initialize all buttons
         Button date = headerView.findViewById(R.id.button_date);
@@ -128,15 +127,15 @@ public class KinoDetailsFragment extends Fragment {
         Button runtime = headerView.findViewById(R.id.button_runtime);
         Button trailer = headerView.findViewById(R.id.button_trailer);
         Button ticket = headerView.findViewById(R.id.button_ticket);
-        ImageView cover = headerView.findViewById(R.id.kino_cover);
-        ProgressBar progress = headerView.findViewById(R.id.kino_cover_progress);
-        View error = headerView.findViewById(R.id.kino_cover_error);
+        ImageView cover = headerView.findViewById(R.id.event_cover);
+        ProgressBar progress = headerView.findViewById(R.id.event_cover_progress);
+        View error = headerView.findViewById(R.id.event_cover_error);
 
         // set text for buttons
-        date.setText(KinoDetailsFragment.formDateString(DateUtils.getDateString(kino.getDate())));
-        imdb.setText(kino.getRating() + " / 10");
-        year.setText(kino.getYear());
-        runtime.setText(kino.getRuntime());
+        date.setText(EventDetailsFragment.formDateString(DateUtils.getDateString(event.getDate())));
+        imdb.setText(event.getRating() + " / 10");
+        year.setText(event.getYear());
+        runtime.setText(event.getRuntime());
 
         // onClickListeners
         link.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url))));
@@ -154,7 +153,7 @@ public class KinoDetailsFragment extends Fragment {
 
         // cover
         Picasso.get()
-                .load(kino.getCover())
+                .load(event.getCover())
                 .into(cover, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -198,7 +197,7 @@ public class KinoDetailsFragment extends Fragment {
     }
 
     private String getTrailerSearchString() {
-        String search = kino.getTitle();
+        String search = event.getTitle();
         search = search.split(": ")[1];
         search = "trailer " + search;
         if (!search.contains("OV")) {
