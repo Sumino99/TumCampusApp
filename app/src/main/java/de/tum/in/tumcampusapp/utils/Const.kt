@@ -40,6 +40,8 @@ object Const {
     const val PUBLIC_KEY = "chat_member_public_key"
     const val PUBLIC_KEY_UPLOADED = "chat_member_public_key_uploaded"
 
+    const val TUMONLINE_BASE_URL = "https://campus.tum.de/tumonline/wbservicesbasic."
+    //val TUMONLINE_BASE_URL = "https://campusquality.tum.de/QSYSTEM_TUM/wbservicesbasic."
     const val TUMO_PIDENT_NR = "pIdentNr"
     const val TUMO_STUDENT_ID = "tumoStudentNr"
     const val TUMO_EXTERNAL_ID = "tumoExternNr"

@@ -35,10 +35,6 @@ import io.reactivex.schedulers.Schedulers;
  * attached by the Token and additional parameters.
  */
 public final class TUMOnlineRequest<T> {
-    // server address
-    private static final String SERVICE_BASE_URL = "https://campus.tum.de/tumonline/wbservicesbasic.";
-    //private static final String SERVICE_BASE_URL = "https://campusquality.tum.de/QSYSTEM_TUM/wbservicesbasic.";
-
     /**
      * String possibly contained in response from server
      */
@@ -267,7 +263,7 @@ public final class TUMOnlineRequest<T> {
      * @return a String URL
      */
     public String getRequestURL() {
-        StringBuilder url = new StringBuilder(SERVICE_BASE_URL).append(method)
+        StringBuilder url = new StringBuilder(Const.TUMONLINE_BASE_URL).append(method)
                                                                .append('?');
 
         // Builds to be fetched URL based on the base-url and additional parameters
