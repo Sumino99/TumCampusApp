@@ -485,10 +485,19 @@ Signatur: %5$s</string>
     <string name="show_answer">Antwort anzeigen</string>
     <string name="title_activity_cards_quiz">Lernkarten</string>
 
-    <!-- QR Code Ticket Activity -->
-    <string name="moviesdetail_dots">Filmdetails</string>
-    <string name="ticketnumber_dots">Ticketnummer</string>
+    <!-- Ticket Activity -->
+    <string name="eventdetail_dots">Veranstaltungsdetails</string>
+    <string name="qrcode_dots">Ticket QRcode</string>
     <string name="your_ticket">Dein Ticket</string>
+    <string name="show_ticket">Ticket Zeigen</string>
+    <string name="buy_ticket">Ticket Kaufen</string>
+    <string name="purchasedetail_dots">Details zu Ihrem Kauf:</string>
+    <string name="continue_to_payment">WEITER ZUR ZAHLUNG</string>
+    <string name="summary">Zusammenfassung</string>
+    <string name="ticket_type">Tickettyp</string>
+    <string name="price">Preis</string>
+    <string name="location">Ort</string>
+
 
     <!-- Create personal Appointment (Calendar) -->
     <string name="create_event">Termin erstellen</string>
@@ -544,5 +553,5 @@ Signatur: %5$s</string>
     <string name="topic">Über</string>
     <!-- Events Activity -->
     <string name="show_booked_events">Gebuchte Veranstaltungen anzeigen</string>
-    <string name="events_overview">Veranstaltungenubersicht</string>
+    <string name="events_overview">Veranstaltungsübersicht</string>
 </resources>

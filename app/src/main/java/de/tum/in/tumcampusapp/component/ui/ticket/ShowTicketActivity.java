@@ -1,6 +1,5 @@
 package de.tum.in.tumcampusapp.component.ui.ticket;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -14,11 +13,11 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import de.tum.in.tumcampusapp.R;
 import de.tum.in.tumcampusapp.component.other.generic.activity.BaseActivity;
+import de.tum.in.tumcampusapp.component.ui.ticket.model.Ticket;
 
 public class ShowTicketActivity extends BaseActivity {
 
-    private TextView movieDetailsTextView;
-    private TextView ticketNumberTextView;
+    private TextView eventDetailsTextView;
     private ImageView ticketQrCode;
 
     public ShowTicketActivity() {
@@ -28,23 +27,19 @@ public class ShowTicketActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        movieDetailsTextView = (TextView) findViewById(R.id.moviedetail);
-        ticketNumberTextView = (TextView) findViewById(R.id.ticketnumber);
+        eventDetailsTextView = (TextView) findViewById(R.id.eventdetail);
         ticketQrCode = (ImageView) findViewById(R.id.ticket_qrcode);
-        //Get data from EventsDetailsFragment
-        Intent intent = getIntent();
-        String data = intent.getStringExtra("movie_data");
-        movieDetailsTextView.setText(data);
-        //get objectclass
 
-        //TODO:It is data from backend. Wait for setting up of backend
-        ticketNumberTextView.setText("87237489273984");
+        //Get data from Api backend, now it is mock up data
+        Ticket ticket = TicketsController.getTickets();
 
-        // TODO:it is Whatever you need to encode in the QR code.Wait for setting up of backend
-        String text = "Kailiang Dong";//Here should be a random 128 character string
+        //load eventdetail
+        String eventdetail = ticket.getEvent().getTitle() + "\n" + ticket.getEvent().getLocality() + "\n" + ticket.getEvent().getDate();
+        eventDetailsTextView.setText(eventdetail);
 
+        String code = ticket.getCode();
         //create the qrcode using library  zxing
-        createQRCode(text);
+        createQRCode(code);
 
     }
 
