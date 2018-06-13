@@ -41,6 +41,7 @@ import de.tum.in.tumcampusapp.component.ui.ticket.model.Event;
 import de.tum.in.tumcampusapp.component.ui.tufilm.model.Kino;
 import de.tum.in.tumcampusapp.utils.Const;
 import de.tum.in.tumcampusapp.utils.Utils;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -63,7 +64,6 @@ public final class TUMCabeClient {
     static final String API_CHAT_ROOMS = API_CHAT + "rooms/";
     static final String API_CHAT_MEMBERS = API_CHAT + "members/";
     static final String API_CURRICULA = "curricula/";
-    static final String API_STATISTICS = "statistics/";
     static final String API_NOTIFICATIONS = "notifications/";
     static final String API_LOCATIONS = "locations/";
     static final String API_DEVICE = "device/";
@@ -97,7 +97,7 @@ public final class TUMCabeClient {
         Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new DateSerializer())
                                      .create();
         builder.addConverterFactory(GsonConverterFactory.create(gson));
-        builder.client(Helper.getOkClient(c));
+        builder.client(Helper.getOkHttpClient(c));
         service = builder.build()
                          .create(TUMCabeAPIService.class);
     }
@@ -152,6 +152,10 @@ public final class TUMCabeClient {
                .enqueue(cb);
     }
 
+    public void addUserToChat(ChatRoom chatRoom, ChatMember member, ChatVerification verification, Callback<ChatRoom> cb) {
+        service.addUserToChat(chatRoom.getId(), member.getId(), verification)
+                .enqueue(cb);
+    }
     public Observable<ChatMessage> sendMessage(int roomId, ChatMessage chatMessage) {
         //If the id is zero then its an new entry otherwise try to update it
         Utils.log("Sending: " + chatMessage.getId() + " " + chatMessage.getText());
@@ -309,11 +313,19 @@ public final class TUMCabeClient {
         }
     }
 
+    public void searchChatMember(String query, Callback<List<ChatMember>> callback){
+        service.searchMemberByName(query).enqueue(callback);
+    }
+
+    public void getChatMemberByLrzId(String lrzId, Callback<ChatMember> callback){
+        service.getMember(lrzId).enqueue(callback);
+    }
+
     public Observable<List<Cafeteria>> getCafeterias() {
         return service.getCafeterias();
     }
 
-    public Observable<List<Kino>> getKinos(String lastId) {
+    public Flowable<List<Kino>> getKinos(String lastId) {
         return service.getKinos(lastId);
     }
 

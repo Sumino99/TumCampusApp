@@ -17,7 +17,7 @@ import de.tum.in.tumcampusapp.component.ui.ticket.model.Event;
 import de.tum.in.tumcampusapp.utils.Utils;
 
 
-public class EventsController implements ProvidesCard {
+public class EventsController {
 
     private final Context context;
 
@@ -58,11 +58,6 @@ public class EventsController implements ProvidesCard {
         for (Event event : events){
             eventsMap.put(event.getId(), event);
         }
-    }
-
-    @Override
-    public void onRequestCard(@NotNull Context context) {
-        // TODO
     }
 
     private void initializeDummyEvents(){

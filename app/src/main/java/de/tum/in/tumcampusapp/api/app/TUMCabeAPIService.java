@@ -31,6 +31,7 @@ import de.tum.in.tumcampusapp.component.ui.news.model.NewsSources;
 import de.tum.in.tumcampusapp.component.ui.studycard.model.StudyCard;
 import de.tum.in.tumcampusapp.component.ui.ticket.model.Event;
 import de.tum.in.tumcampusapp.component.ui.tufilm.model.Kino;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -80,6 +81,9 @@ public interface TUMCabeAPIService {
     @POST(API_CHAT_ROOMS + "{room}/leave/")
     Call<ChatRoom> leaveChatRoom(@Path("room") int roomId, @Body ChatVerification verification);
 
+    @POST(API_CHAT_ROOMS + "{room}/add/{member}")
+    Call<ChatRoom> addUserToChat(@Path("room") int roomId, @Path("member") int userId, @Body ChatVerification verification);
+
     //Get/Update single message
     @PUT(API_CHAT_ROOMS + "{room}/message/")
     Observable<ChatMessage> sendMessage(@Path("room") int roomId, @Body ChatMessage message);
@@ -99,6 +103,9 @@ public interface TUMCabeAPIService {
 
     @GET(API_CHAT_MEMBERS + "{lrz_id}/")
     Call<ChatMember> getMember(@Path("lrz_id") String lrzId);
+
+    @GET(API_CHAT_MEMBERS + "search/{query}/")
+    Call<List<ChatMember>> searchMemberByName(@Path("query") String nameQuery);
 
     @POST(API_CHAT_MEMBERS + "{memberId}/rooms/")
     Call<List<ChatRoom>> getMemberRooms(@Path("memberId") int memberId, @Body ChatVerification verification);
@@ -189,7 +196,7 @@ public interface TUMCabeAPIService {
     Observable<List<Cafeteria>> getCafeterias();
 
     @GET(API_KINOS + "{lastId}")
-    Observable<List<Kino>> getKinos(@Path("lastId") String lastId);
+    Flowable<List<Kino>> getKinos(@Path("lastId") String lastId);
 
     @GET(API_CARD)
     Call<List<StudyCard>> getStudyCards();
